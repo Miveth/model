@@ -4,6 +4,12 @@ import numpy as np
 COLOR_FONDO = (240, 240, 240)
 COLOR_CELDA = (200, 200, 200)
 COLOR_AGENTE = (255, 100, 100)
+COLORES_AGENTES = {
+    "Turista": (205, 133, 63),           # rojo
+    "ResidentePermanente": (100, 100, 255), # azul
+    "ResidenteSecundario": (100, 255, 100), # verde
+    "Excursionista": (255, 255, 100)       # amarillo
+}
 
 def mostrar_simulacion(grid, agentes, tamaño_celda=40, velocidad=1):
     filas = grid.filas
@@ -61,8 +67,10 @@ def mostrar_simulacion(grid, agentes, tamaño_celda=40, velocidad=1):
             x_pix = agente.y * tamaño_celda
             y_pix = agente.x * tamaño_celda
 
+            color = COLORES_AGENTES.get(agente.tipo, COLOR_AGENTE)
+
             pygame.draw.circle(
-                pantalla, COLOR_AGENTE,
+                pantalla, color,
                 (x_pix + tamaño_celda // 2, y_pix + tamaño_celda // 2),
                 tamaño_celda // 4
             )
