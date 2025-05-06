@@ -1,0 +1,13 @@
+Factor,Residentes permanentes,Residentes secundarios,Turistas,Excursionistas
+Acceso al mar,0.5,0.9,1.0,0.8
+Precio de la vivienda,1.0,0.6,0.3,0.1
+Accesibilidad / tiempo de viaje,0.8,0.7,0.6,1.0
+"Servicios públicos (escuelas, salud)",1.0,0.4,0.2,0.1
+Infraestructura turística,0.3,0.6,1.0,0.9
+Entorno social / comunidad,0.9,0.6,0.2,0.1
+Clima y estación,0.2,0.7,0.9,0.8
+Imagen simbólica del lugar,0.5,0.8,1.0,0.7
+Estilo de vida y bienestar,0.7,1.0,0.9,0.6
+Red social local (amigos/familia),0.9,0.6,0.3,0.2
+Disponibilidad inmobiliaria,0.8,0.9,0.7,0.5
+Preocupación ambiental,0.6,0.9,0.7,0.4
