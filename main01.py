@@ -16,14 +16,20 @@ grid = Grid(20, 20, num_factores)
 agentes = []
 
 # Agente Turista
-turista = Agente("Turista", 0, 0, preferencias["Turistas"], umbral=5)
+turista = Agente(1, "Turista", 0, 0, preferencias["Turistas"], umbral=10)
 turista.decidir_mudanza(grid)
 agentes.append(turista)
 
 # Agente Residente Permanente
-residente = Agente("ResidentePermanente", 19, 19, preferencias["Residentes permanentes"], umbral=5)
+residente = Agente(2, "ResidentePermanente", 19, 19, preferencias["Residentes permanentes"], umbral=5)
 residente.decidir_mudanza(grid)
 agentes.append(residente)
+
+# Agente Residente Secundario
+residente_secundario = Agente(3, "ResidenteSecundario", 19, 19, preferencias["Residentes secundarios"], umbral=5)
+residente_secundario.decidir_mudanza(grid)
+agentes.append(residente_secundario)
+
 
 # 4. Decidir si se mueve
 #print(f"Posición inicial: ({agente.x}, {agente.y})")

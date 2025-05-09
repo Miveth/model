@@ -3,13 +3,14 @@ import numpy as np
 import random
 
 class Agente:
-    def __init__(self, tipo, x, y, pesos, umbral):
+    def __init__(self, unique_id, tipo, x, y, pesos, umbral):
         """
         tipo: tipo de agente (ej: 'Turista')
         x, y: posición inicial del agente en la malla
         pesos: lista de 12 valores que indican qué tan importante es cada factor
         umbral: puntuación mínima que acepta para quedarse en una celda
         """
+        self.unique_id = unique_id
         self.tipo = tipo
         self.x = x
         self.y = y

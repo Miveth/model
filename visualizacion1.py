@@ -14,8 +14,8 @@ COLORES_AGENTES = {
 def mostrar_simulacion(grid, agentes, tamaño_celda=40, velocidad=1):
     filas = grid.filas
     columnas = grid.columnas
-    ancho = columnas * tamaño_celda
-    alto = filas * tamaño_celda + 80
+    ancho = columnas * tamaño_celda + 500
+    alto = filas * tamaño_celda + 100
 
     pygame.init()
     pantalla = pygame.display.set_mode((ancho, alto))
@@ -34,6 +34,14 @@ def mostrar_simulacion(grid, agentes, tamaño_celda=40, velocidad=1):
 
     paso = 0
     corriendo = True
+
+    headers = [
+                "Agente",
+                "Celda",
+                "Score",
+                 "Umbral",
+                 "Estado"
+             ]
 
     while corriendo:
         for evento in pygame.event.get():
@@ -59,7 +67,15 @@ def mostrar_simulacion(grid, agentes, tamaño_celda=40, velocidad=1):
                     icono = pygame.transform.scale(iconos[tipo_icono], (tamaño_celda, tamaño_celda))
                     pantalla.blit(icono, (j * tamaño_celda, i * tamaño_celda))
 
-        # 🔴 Dibujar agentes y texto
+       # 🔴 Dibujar agentes y texto
+        mx, my = pygame.mouse.get_pos()
+        hover_text = None
+        
+        # Dibujar encabezados
+        for idx, header in enumerate(headers):
+            texto_header = fuente.render(header, True, (0, 0, 0))
+            pantalla.blit(texto_header, ((ancho - 480)+(idx*70), 20)) 
+
         for agente in agentes:
             if hasattr(agente, "ruta") and paso < len(agente.ruta):
                 agente.x, agente.y = agente.ruta[paso]
@@ -73,20 +89,49 @@ def mostrar_simulacion(grid, agentes, tamaño_celda=40, velocidad=1):
                 pantalla, color,
                 (x_pix + tamaño_celda // 2, y_pix + tamaño_celda // 2),
                 tamaño_celda // 4
-            )
-
-            # Mostrar info en pantalla (score en tiempo real)
+            ) 
+             # 📌 Hover para mostrar información
+            if x_pix <= mx <= x_pix + tamaño_celda and y_pix <= my <= y_pix + tamaño_celda:
+                hover_text = f"{agente.tipo} - ({agente.x}, {agente.y})"
+            
+            # Mostrar info en pantalla (score en tiempo real) en formato tabla
             if hasattr(agente, "evaluaciones"):
                 for (ex, ey, score, ok) in agente.evaluaciones:
                     if (ex, ey) == (agente.x, agente.y):
-                        texto1 = fuente.render(f"Evaluando celda: ({ex},{ey})", True, (0, 0, 0))
-                        texto2 = fuente.render(f"Score: {score} | Umbral: {agente.umbral}", True, (0, 0, 0))
-                        texto3 = fuente.render(f"{'✅ Satisfecho' if ok else '❌ No cumple'}", True, (0, 150, 0) if ok else (200, 0, 0))
+                        # Datos en formato tabla
+                        datos = [
+                            f"#{agente.unique_id}AG",  # El ID del agente
+                            f"({ex},{ey})",
+                            f"{score:.2f}",
+                            f"{agente.umbral}",
+                            "✅ Satisfecho" if ok else "❌ No cumple"
+                        ]
+                        
+                        # Dibujar datos
+                        for idx, dato in enumerate(datos):
+                            # Color para el ID del agente (primera columna)
+                            if idx == 0:
+                                color = COLORES_AGENTES.get(agente.tipo, (0, 0, 0))  # Usa el color del agente
+                            # Color para el estado (última columna)
+                            elif idx == 4:
+                                color = (0, 150, 0) if ok else (200, 0, 0)
+                            # Color por defecto para el resto
+                            else:
+                                color = (0, 0, 0)
+                                
+                            texto_dato = fuente.render(dato, True, color)
+                            pantalla.blit(texto_dato, ((ancho - 475)+(idx*70), 20 + (agente.unique_id * 20)))
 
-                        pantalla.blit(texto1, (10, filas * tamaño_celda + 5))
-                        pantalla.blit(texto2, (10, filas * tamaño_celda + 25))
-                        pantalla.blit(texto3, (10, filas * tamaño_celda + 45))
+                        # Mantener el nombre del agente en la parte inferior
+                        texto_nombre = fuente.render(f"Agente#{agente.unique_id} (Tipo: {agente.tipo})", True, COLORES_AGENTES.get(agente.tipo, (0, 0, 0)) )
+                        offset_y = (agente.unique_id - 1) * 20
+                        pantalla.blit(texto_nombre, (10, filas * tamaño_celda + 5 + offset_y))
                         break
+
+#       🖱️ Mostrar el hover si existe
+        if hover_text:
+            texto_hover = fuente.render(hover_text, True, (50, 50, 50))
+            pantalla.blit(texto_hover, (mx + 15, my + 5))
 
         pygame.display.flip()
         reloj.tick(velocidad)
