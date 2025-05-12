@@ -1,13 +1,17 @@
 import pygame
 import numpy as np
+from grafica_puntos import crear_grafica_scores_intentos
+import matplotlib.pyplot as plt
+import io
+from grafica_puntos import crear_grafica_scores_dinamica
 
 COLOR_FONDO = (240, 240, 240)
 COLOR_CELDA = (200, 200, 200)
 COLOR_AGENTE = (255, 100, 100)
 COLORES_AGENTES = {
-    "Turista": (205, 133, 63),           # rojo
-    "ResidentePermanente": (100, 100, 255), # azul
-    "ResidenteSecundario": (100, 255, 100), # verde
+    "Turistas": (205, 133, 63),           # rojo
+    "Residentes permanentes": (100, 100, 255), # azul
+    "Residentes secundarios": (100, 255, 100), # verde
     "Excursionista": (255, 255, 100)       # amarillo
 }
 
@@ -132,6 +136,19 @@ def mostrar_simulacion(grid, agentes, tamaño_celda=40, velocidad=1):
         if hover_text:
             texto_hover = fuente.render(hover_text, True, (50, 50, 50))
             pantalla.blit(texto_hover, (mx + 15, my + 5))
+
+        # Crear la gráfica dinámica y mostrarla en pygame
+        buf = crear_grafica_scores_dinamica(agentes, paso, ventana=20, colores_agentes=COLORES_AGENTES)
+        grafica_img = pygame.image.load(buf, 'grafica.png')
+        pantalla.blit(grafica_img, (ancho - 480, 120))  # Ajusta la posición según tu layout
+
+        # Dibuja la leyenda personalizada
+        x_leyenda = ancho - 470  # Más a la izquierda (ajusta según tu layout)
+        y_leyenda = 350          # Más abajo (ajusta según tu layout)
+        for idx, agente in enumerate(agentes):
+            color = COLORES_AGENTES.get(agente.tipo, (0, 0, 0))
+            texto = fuente.render(f"Agente#{agente.unique_id}", True, color)
+            pantalla.blit(texto, (x_leyenda, y_leyenda + idx * 25))
 
         pygame.display.flip()
         reloj.tick(velocidad)

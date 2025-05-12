@@ -106,4 +106,30 @@ for tipo, config in config_agentes.items():
 #mostrar_simulacion(grid, agentes, tamaño_celda=30, velocidad=3)
 
 
-mostrar_simulacion(grid, agentes, tamaño_celda=30, velocidad=3)
+''' para crear en otro main o solo probar la grafica poner en otro main
+import copy
+from grafica_matplot import animar_grid
+'''
+
+num_pasos = 20  # Puedes ajustar el número de pasos
+historial_agentes = []
+
+for paso in range(num_pasos):
+    for agente in agentes:
+        agente.decidir_mudanza(grid, agentes)
+    historial_agentes.append(copy.deepcopy(agentes))
+
+# Animación con matplotlib
+animar_grid(grid, historial_agentes)
+
+# (Opcional) Visualización en Pygame
+# mostrar_simulacion(grid, agentes, tamaño_celda=30, velocidad=3)
+
+# Asumiendo que los índices de factores son:
+# 0: mar, 4: hotel, 3: escuela, 8: parque, 10: casa
+
+# Mar en la esquina superior izquierda (4x7)
+#grid.asignar_region(0, 0, 7, 4, factor_idx=0, valor=1.0)
+
+# Mar en la esquina inferior derecha (4x7)
+#mostrar_simulacion(grid, agentes, tamaño_celda=30, velocidad=3)
